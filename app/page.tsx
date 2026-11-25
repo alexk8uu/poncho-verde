@@ -5,7 +5,7 @@ import Pie from "@/components/Pie";
 import Revelar from "@/components/Revelar";
 import { Asociate, Cinta, Hero, Manifiesto, Preguntas, QuienesSomos, Servicios } from "@/components/Secciones";
 import { fotos } from "@/content/fotos";
-import { carrusel, lemas } from "@/content/sitio";
+import { carrusel } from "@/content/sitio";
 
 /*
  * La landing, en el orden del brief y con los recursos de la referencia:
@@ -15,7 +15,7 @@ import { carrusel, lemas } from "@/content/sitio";
 export default function Inicio() {
   const diapositivas = [fotos.cultivoSol, fotos.quebrada, fotos.cafayate, fotos.cardones].map((foto, i) => ({
     foto,
-    lema: lemas[i],
+    etiqueta: carrusel.etiquetas[i],
   }));
 
   return (
@@ -28,7 +28,7 @@ export default function Inicio() {
         <Servicios />
         <Cinta giro="arriba" sentido="derecha" />
         <QuienesSomos />
-        <Carrusel diapositivas={diapositivas} {...carrusel} />
+        <Carrusel diapositivas={diapositivas} banda={carrusel.banda} titulo={carrusel.titulo} script={carrusel.script} />
         <Preguntas />
         <Asociate />
       </main>

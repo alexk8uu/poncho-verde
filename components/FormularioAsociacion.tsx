@@ -29,15 +29,21 @@ const ID: Record<Clave, string> = {
   consentimiento: "f-consentimiento",
 };
 
+/** Aviso dibujado: círculo dorado con el signo en bordó (acompaña al texto, nunca lo reemplaza). */
+function Alerta({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" className={`flex-none ${className}`} aria-hidden="true" focusable="false">
+      <circle cx="8" cy="8" r="8" fill="var(--color-dorado)" />
+      <path d="M8 4.1v4.8" stroke="var(--color-bordo)" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="8" cy="11.6" r="1.1" fill="var(--color-bordo)" />
+    </svg>
+  );
+}
+
 function MensajeError({ id, texto }: { id: string; texto?: string }) {
   return (
-    <p id={id} className={`mt-2 flex items-start gap-2 text-[14px] leading-snug text-crema ${texto ? "" : "hidden"}`}>
-      <span
-        aria-hidden="true"
-        className="mt-0.5 inline-flex h-4 w-4 flex-none items-center justify-center rounded-full bg-dorado text-[11px] font-bold text-bordo"
-      >
-        !
-      </span>
+    <p id={id} className={`mt-2 flex items-start gap-2 text-[15px] leading-snug text-crema ${texto ? "" : "hidden"}`}>
+      <Alerta className="mt-[3px] h-4 w-4" />
       {texto}
     </p>
   );
@@ -68,9 +74,11 @@ export default function FormularioAsociacion() {
     );
   }
 
-  const campo = (k: "nombre" | "email" | "telefono", tipo: string, auto: string, extra: object = {}) => (
+  const campo = (k: "nombre" | "email" | "telefono", tipo: string, auto: string, extra: object = {}) => {
+    const ayuda = k === "telefono" ? c.telefono.ayuda : undefined;
+    return (
     <div className="campo">
-      <label htmlFor={ID[k]} className="etiqueta block text-crema/85">
+      <label htmlFor={ID[k]} className="etiqueta mb-1.5 block text-[13px] tracking-[0.12em] text-crema">
         {c[k].etiqueta}
       </label>
       <input
@@ -81,13 +89,20 @@ export default function FormularioAsociacion() {
         required
         defaultValue={estado.valores?.[k] ?? ""}
         aria-invalid={errores[k] ? true : undefined}
-        aria-describedby={`${ID[k]}-err`}
+        aria-describedby={ayuda ? `${ID[k]}-ayuda ${ID[k]}-err` : `${ID[k]}-err`}
         onInput={() => errores[k] && setErroresLocales(({ [k]: _, ...resto }) => resto)}
         {...extra}
       />
+      {/* la ayuda va debajo de la línea: así el campo queda alineado con el de al lado */}
+      {ayuda && (
+        <p id={`${ID[k]}-ayuda`} className="mt-2 text-[14px] leading-snug text-crema/90">
+          {ayuda}
+        </p>
+      )}
       <MensajeError id={`${ID[k]}-err`} texto={errores[k]} />
     </div>
-  );
+    );
+  };
 
   const casilla = (k: "mayorDeEdad" | "consentimiento", nombre: string, contenido: ReactNode) => (
     <div>
@@ -98,6 +113,7 @@ export default function FormularioAsociacion() {
           type="checkbox"
           value="si"
           required
+          defaultChecked={estado.valores?.[k] ?? false}
           aria-invalid={errores[k] ? true : undefined}
           aria-describedby={`${ID[k]}-err`}
           onChange={() => errores[k] && setErroresLocales(({ [k]: _, ...resto }) => resto)}
@@ -136,20 +152,32 @@ export default function FormularioAsociacion() {
           "consentimiento",
           <>
             {c.consentimiento.etiqueta}{" "}
-            <a href="/privacidad" className="underline underline-offset-4">
+            <a href="/privacidad" target="_blank" rel="noopener" className="underline underline-offset-4">
               {c.consentimiento.enlace}
+              <span className="sr-only"> {c.consentimiento.nuevaPestana}</span>
             </a>
           </>,
         )}
       </div>
       {/* campo trampa contra envíos automáticos: oculto para las personas */}
       <input type="text" name="empresa" tabIndex={-1} autoComplete="off" hidden aria-hidden="true" />
-      <div className="flex flex-col items-start gap-4">
+      {estado.estado === "error" && !enviando && (
+        <div role="alert" className="flex gap-3 border border-crema/45 bg-black/15 p-4 text-[15px] leading-snug">
+          <Alerta className="mt-[2px] h-[18px] w-[18px]" />
+          <div>
+            <p className="font-medium">{asociate.fallo.titulo}</p>
+            <p className="mt-1">{asociate.fallo.texto}</p>
+            <p className="mt-2 text-crema/90">{asociate.fallo.alternativa}</p>
+          </div>
+        </div>
+      )}
+      <div className="flex flex-col items-start gap-3">
         <button type="submit" className="boton boton--crema text-bordo" disabled={enviando} aria-disabled={enviando}>
-          {enviando ? asociate.enviando : "Solicitar asociación"}
+          {enviando ? asociate.enviando : asociate.boton}
         </button>
-        <p role="status" className="min-h-[1.5em] text-[14px]">
-          {estado.estado === "error" ? asociate.fallo : Object.keys(errores).length ? asociate.corregir : ""}
+        <p className="max-w-[44ch] text-[14px] leading-snug text-crema/90">{asociate.compromiso}</p>
+        <p role="status" className="min-h-[1.5em] text-[15px] empty:min-h-0">
+          {Object.keys(errores).length ? asociate.corregir : ""}
         </p>
       </div>
     </form>

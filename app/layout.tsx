@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <a
           href="#contenido"
-          className="etiqueta sr-only rounded-full bg-crema px-4 py-3 text-bosque focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[60]"
+          className="etiqueta sr-only rounded-full bg-bosque text-crema shadow-[0_10px_30px_-10px_rgb(0_0_0/0.5)] focus:not-sr-only focus:fixed focus:left-4 focus:top-[84px] focus:z-[60] focus:px-5 focus:py-3"
         >
           Ir al contenido
         </a>

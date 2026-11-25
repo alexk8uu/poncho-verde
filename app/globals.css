@@ -54,6 +54,8 @@
   }
   /* sobre fotos y bloques oscuros el anillo va en crema, para que se vea */
   .text-crema :focus-visible { outline-color: var(--color-crema); }
+  /* párrafos sin palabras sueltas en la última línea */
+  p, li, figcaption { text-wrap: pretty; }
   ::selection {
     background: color-mix(in oklab, var(--color-naranja) 35%, transparent);
   }
@@ -78,7 +80,7 @@
   }
   /* etiquetas chicas en mayúsculas espaciadas */
   .etiqueta {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -180,13 +182,8 @@
   /* sello circular con texto alrededor */
   .sello { border-radius: 999px; }
 
-  /* estampilla: borde dentado */
-  .estampilla {
-    background: var(--color-crema);
-    --d: 6px;
-    -webkit-mask: radial-gradient(circle at var(--d) var(--d), transparent calc(var(--d) * 0.55), #000 calc(var(--d) * 0.6)) calc(var(--d) * -1) calc(var(--d) * -1) / calc(var(--d) * 2) calc(var(--d) * 2);
-    mask: radial-gradient(circle at var(--d) var(--d), transparent calc(var(--d) * 0.55), #000 calc(var(--d) * 0.6)) calc(var(--d) * -1) calc(var(--d) * -1) / calc(var(--d) * 2) calc(var(--d) * 2);
-  }
+  /* estampilla (components/Emblema.tsx): el papel con el borde troquelado lleva una sombra corta que sigue el troquel */
+  .estampilla { filter: drop-shadow(0 6px 8px rgb(20 30 22 / 0.35)); }
 
   /* preguntas: el signo gira al abrir */
   .pregunta > summary { list-style: none; cursor: pointer; }
@@ -208,7 +205,13 @@
     transition: border-color 200ms ease;
   }
   .campo input:hover { border-bottom-color: color-mix(in oklab, var(--color-crema) 80%, transparent); }
-  .campo input:focus-visible { outline: 2px solid var(--color-crema); outline-offset: 4px; border-bottom: 2px solid var(--color-crema); }
+  /* foco: anillo pegado al campo (no tapa la etiqueta de arriba) y un velo claro de fondo */
+  .campo input:focus-visible {
+    outline: 2px solid var(--color-crema);
+    outline-offset: 2px;
+    border-bottom: 2px solid var(--color-crema);
+    background: color-mix(in oklab, var(--color-crema) 8%, transparent);
+  }
   .campo input[aria-invalid="true"] { border-bottom: 2px solid var(--color-dorado); }
   .casilla input[type="checkbox"] {
     width: 20px;

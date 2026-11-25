@@ -7,11 +7,13 @@ import { Emblema } from "./Emblema";
 /*
  * El encabezado de la referencia: el emblema y el nombre a la izquierda, sobre la foto del hero y en crema;
  * al dejar el hero pasa a fondo crema con tinta verde. En pantallas chicas, las dos líneas abren un menú
- * a pantalla completa (Escape lo cierra y el foco vuelve al botón).
+ * a pantalla completa (Escape lo cierra y el foco vuelve al botón). En el celular, al dejar el hero aparece un botón
+ * corto "Asociarme" junto al menú, para que la acción principal esté siempre a mano; se oculta sobre el formulario.
  */
 export default function Encabezado() {
   const [solido, setSolido] = useState(false);
   const [abierto, setAbierto] = useState(false);
+  const [enFormulario, setEnFormulario] = useState(false);
   const boton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -22,6 +24,14 @@ export default function Encabezado() {
     }
     const io = new IntersectionObserver(([e]) => setSolido(!e.isIntersecting), { rootMargin: "-72px 0px 0px 0px" });
     io.observe(hero);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const seccion = document.getElementById("asociate");
+    if (!seccion) return;
+    const io = new IntersectionObserver(([e]) => setEnFormulario(e.isIntersecting), { threshold: 0.15 });
+    io.observe(seccion);
     return () => io.disconnect();
   }, []);
 
@@ -44,6 +54,7 @@ export default function Encabezado() {
 
   const claro = !solido || abierto;
   const cerrar = () => setAbierto(false);
+  const accionMovil = solido && !abierto && !enFormulario;
 
   return (
     <header
@@ -71,10 +82,21 @@ export default function Encabezado() {
           </a>
         </nav>
 
+        <div className="flex items-center gap-1 lg:hidden">
+        <a
+          href={accionPrincipal.destino}
+          tabIndex={accionMovil ? undefined : -1}
+          aria-hidden={accionMovil ? undefined : true}
+          className={`boton boton--bosque min-h-11 px-4 text-[11px] tracking-[0.14em] transition-[opacity,transform,background-color] duration-300 motion-reduce:transition-none ${
+            accionMovil ? "opacity-100" : "pointer-events-none translate-y-1 opacity-0"
+          }`}
+        >
+          {accionPrincipal.corto}
+        </a>
         <button
           ref={boton}
           type="button"
-          className="-mr-2 flex h-11 w-11 flex-col items-center justify-center gap-[7px] lg:hidden"
+          className="-mr-2 flex h-11 w-11 flex-col items-center justify-center gap-[7px]"
           aria-expanded={abierto}
           aria-controls="menu-movil"
           aria-label={abierto ? "Cerrar menú" : "Abrir menú"}
@@ -87,6 +109,7 @@ export default function Encabezado() {
             className={`block h-px w-7 bg-current transition-transform duration-300 ${abierto ? "-translate-y-[4px] -rotate-45" : ""}`}
           />
         </button>
+        </div>
       </div>
 
       <div

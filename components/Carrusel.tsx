@@ -4,11 +4,11 @@ import { useCallback, useRef, useState } from "react";
 import type { Foto } from "@/content/fotos";
 import { Emblema } from "./Emblema";
 
-type Diapositiva = { foto: Foto; lema: string };
+type Diapositiva = { foto: Foto; etiqueta: string };
 
 /*
- * "La vida en la fundación": una foto a pantalla completa por lema, como la sección de cultura de la referencia.
- * No avanza solo: cada lema de abajo (o las flechas, o deslizar en el celular) cambia la foto.
+ * "La fundación y su tierra": una foto a pantalla completa, como la sección de cultura de la referencia.
+ * No avanza solo: cada nombre de abajo (o las flechas, o deslizar en el celular) cambia la foto.
  * Solo se descargan las fotos que se muestran, más la siguiente.
  */
 export default function Carrusel({
@@ -16,17 +16,15 @@ export default function Carrusel({
   banda,
   titulo,
   script,
-  intro,
 }: {
   diapositivas: Diapositiva[];
   banda: string[];
   titulo: string;
   script: string;
-  intro: string;
 }) {
   const [actual, setActual] = useState(0);
   const [cargadas, setCargadas] = useState<Set<number>>(() => new Set([0, 1]));
-  const toque = useRef<number | null>(null);
+  const toque = useRef<{ x: number; y: number } | null>(null);
   const total = diapositivas.length;
 
   const ir = useCallback(
@@ -43,12 +41,15 @@ export default function Carrusel({
       id="la-fundacion"
       aria-roledescription="carrusel"
       aria-labelledby="carrusel-h"
-      className="relative flex min-h-[640px] flex-col overflow-hidden bg-bosque text-crema h-[100svh]"
-      onTouchStart={(e) => (toque.current = e.touches[0].clientX)}
+      className="relative flex h-[82svh] min-h-[560px] flex-col overflow-hidden bg-bosque text-crema md:h-[100svh] md:min-h-[640px]"
+      onTouchStart={(e) => (toque.current = { x: e.touches[0].clientX, y: e.touches[0].clientY })}
+      onTouchCancel={() => (toque.current = null)}
       onTouchEnd={(e) => {
         if (toque.current === null) return;
-        const dx = e.changedTouches[0].clientX - toque.current;
-        if (Math.abs(dx) > 48) ir(actual + (dx < 0 ? 1 : -1));
+        const dx = e.changedTouches[0].clientX - toque.current.x;
+        const dy = e.changedTouches[0].clientY - toque.current.y;
+        // solo un deslizamiento claramente horizontal cambia la foto: el scroll vertical (aunque vaya en diagonal) no
+        if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5) ir(actual + (dx < 0 ? 1 : -1));
         toque.current = null;
       }}
     >
@@ -82,12 +83,12 @@ export default function Carrusel({
       </div>
 
       {/* banda de datos */}
-      <div className="relative z-10 mx-auto flex w-full max-w-[1320px] items-center justify-between gap-4 px-6 pt-24 md:px-10">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1320px] items-center justify-center gap-5 px-6 pt-24 sm:justify-between sm:gap-4 md:px-10">
         {banda.map((b, i) =>
           b === "emblema" ? (
             <Emblema key={i} className="h-7 w-7 shrink-0" />
           ) : (
-            <span key={i} className={`etiqueta ${i === 0 || i === banda.length - 1 ? "" : "hidden sm:inline"}`}>
+            <span key={i} className={`etiqueta ${i === 0 || i === banda.length - 1 ? "hidden sm:inline" : ""}`}>
               {b}
             </span>
           ),
@@ -102,12 +103,10 @@ export default function Carrusel({
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-[1320px] px-6 pb-10 md:px-10">
-        <p className="mb-4 text-center text-[13px] text-crema/85">{intro}</p>
-
-        {/* pantallas grandes: los cuatro lemas en fila, separados por ◆ */}
+        {/* pantallas grandes: los cuatro nombres en fila, separados por ◆ */}
         <div className="hidden items-center justify-between gap-4 lg:flex" role="group" aria-label="Elegir foto">
           {diapositivas.map((d, i) => (
-            <div key={d.lema} className="contents">
+            <div key={d.etiqueta} className="contents">
               {i > 0 && (
                 <span aria-hidden="true" className="text-[10px] text-dorado">
                   ◆
@@ -121,13 +120,13 @@ export default function Carrusel({
                   i === actual ? "text-crema underline decoration-naranja decoration-2 underline-offset-8" : "text-crema/70 hover:text-crema"
                 }`}
               >
-                {d.lema}
+                {d.etiqueta}
               </button>
             </div>
           ))}
         </div>
 
-        {/* tablet y celular: flechas y el lema actual */}
+        {/* tablet y celular: flechas y el nombre de la foto actual */}
         <div className="flex items-center justify-between gap-4 lg:hidden">
           <button
             type="button"
@@ -140,8 +139,8 @@ export default function Carrusel({
             </svg>
           </button>
           <p className="etiqueta text-center">
-            {diapositivas[actual].lema}
-            <span className="ml-2 text-crema/60">
+            {diapositivas[actual].etiqueta}
+            <span className="ml-2 text-crema/75">
               {actual + 1}/{total}
             </span>
           </p>
@@ -158,7 +157,7 @@ export default function Carrusel({
         </div>
 
         <p className="sr-only" aria-live="polite">
-          Foto {actual + 1} de {total}: {diapositivas[actual].lema}
+          Foto {actual + 1} de {total}: {diapositivas[actual].etiqueta}
         </p>
       </div>
     </section>

@@ -11,7 +11,7 @@ import {
   sede,
   servicios,
 } from "@/content/sitio";
-import { Emblema, Sello } from "./Emblema";
+import { Emblema, Estampilla, Sello } from "./Emblema";
 import FormularioAsociacion from "./FormularioAsociacion";
 
 /** Una foto con los datos que pide el checker (data-source, data-subject). */
@@ -89,6 +89,19 @@ export function Manifiesto() {
       <div data-revelar className="mx-auto flex max-w-[860px] flex-col items-center text-center">
         <Emblema className="h-10 w-10 text-bosque" />
         <p className="ancho mt-8 text-[clamp(1.35rem,1rem+1.3vw,2.1rem)] leading-[1.35]">{manifiesto.texto}</p>
+        {/* los datos confirmados, legibles: la primera prueba de confianza después del hero */}
+        <ul className="mt-12 flex flex-col items-center gap-x-5 gap-y-2 text-[16px] font-medium text-bosque sm:flex-row sm:flex-wrap sm:justify-center">
+          {manifiesto.datos.map((d, i) => (
+            <li key={d} className="flex items-center gap-5">
+              {i > 0 && (
+                <span aria-hidden="true" className="hidden text-[9px] text-bordo sm:inline">
+                  ◆
+                </span>
+              )}
+              {d}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -156,7 +169,7 @@ export function Servicios() {
             style={{ "--rot": ROT[i], transitionDelay: `${i * 90}ms` } as CSSProperties}
           >
             <h3 className="ancho text-[19px] leading-tight">{s.nombre}</h3>
-            <p className="mt-2 min-h-[3.2em] text-[13px] leading-snug text-crema/85">{s.descripcion}</p>
+            <p className="mt-2 min-h-[4.1em] text-[14px] leading-snug text-crema/90">{s.descripcion}</p>
             <div className="pelicula zoom mt-4 aspect-[4/3]">
               <Imagen foto={FOTO_SERVICIO[s.clave]} sizes="(max-width: 639px) 300px, 300px" posicion={POS_SERVICIO[s.clave]} />
             </div>
@@ -186,16 +199,14 @@ export function QuienesSomos() {
         <div className="pelicula zoom aspect-[16/10] md:aspect-[16/9]">
           <Imagen foto={fotos.filosofia} sizes="(max-width: 960px) 100vw, 900px" posicion="50% 55%" />
         </div>
-        <figcaption className="flex flex-col gap-2 px-1 pb-1 pt-4 sm:flex-row sm:items-end sm:justify-between sm:pr-20 md:pr-24">
+        <figcaption className="px-1 pb-1 pr-24 pt-4">
           <span className="script text-[26px] leading-none md:text-[30px]">{quienesSomos.marco.script}</span>
-          <span className="max-w-[34ch] text-[12px] leading-snug text-crema/80 sm:text-right">{quienesSomos.marco.texto}</span>
         </figcaption>
 
-        <div aria-hidden="true" className="estampilla absolute -left-3 -top-6 h-[76px] w-[64px] -rotate-[8deg] p-[7px] lg:-left-7 lg:-top-8">
-          <div className="flex h-full w-full items-center justify-center border border-bosque text-bosque">
-            <Emblema className="h-9 w-9" />
-          </div>
-        </div>
+        <Estampilla
+          id="estampilla-quienes"
+          className="absolute -left-3 -top-6 h-[76px] w-[64px] -rotate-[8deg] text-bosque lg:-left-7 lg:-top-8"
+        />
         <Sello
           id="sello-quienes"
           texto="PONCHO VERDE ◆ SALTA ◆ DESDE 2026 ◆ "

@@ -7,7 +7,8 @@ import { asociate } from "@/content/sitio";
 export type EstadoSolicitud = {
   estado: "inicial" | "enviado" | "invalido" | "error";
   errores?: Partial<Record<"nombre" | "email" | "telefono" | "mayorDeEdad" | "consentimiento", string>>;
-  valores?: { nombre: string; email: string; telefono: string };
+  // lo que la persona ya cargó, para devolvérselo intacto si algo falla (casillas incluidas)
+  valores?: { nombre: string; email: string; telefono: string; mayorDeEdad: boolean; consentimiento: boolean };
 };
 
 /*
@@ -20,6 +21,8 @@ export async function enviarSolicitud(_previo: EstadoSolicitud, datos: FormData)
     nombre: String(datos.get("nombre") ?? ""),
     email: String(datos.get("email") ?? ""),
     telefono: String(datos.get("telefono") ?? ""),
+    mayorDeEdad: datos.get("mayor_de_edad") === "si",
+    consentimiento: datos.get("consentimiento") === "si",
   };
   const resultado = validarSolicitud(datos);
   if (!resultado.ok) {

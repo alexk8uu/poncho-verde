@@ -43,3 +43,35 @@ export function Sello({ id, texto, className = "" }: { id: string; texto: string
     </svg>
   );
 }
+
+/*
+ * Estampilla: un rectángulo de papel crema con el borde troquelado (medios círculos parejos en los cuatro lados),
+ * un filete interior y el emblema. Las medidas son múltiplos del paso del troquel, así las esquinas cierran justas.
+ * `id` tiene que ser único en la página.
+ */
+export function Estampilla({ id, className = "" }: { id: string; className?: string }) {
+  const W = 60;
+  const H = 72;
+  const PASO = 6;
+  const R = 2.1;
+  const agujeros: [number, number][] = [];
+  for (let x = 0; x <= W; x += PASO) agujeros.push([x, 0], [x, H]);
+  for (let y = PASO; y < H; y += PASO) agujeros.push([0, y], [W, y]);
+  return (
+    <svg className={`estampilla ${className}`} viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+      <defs>
+        <mask id={id}>
+          <rect width={W} height={H} fill="#fff" />
+          {agujeros.map(([x, y]) => (
+            <circle key={`${x}-${y}`} cx={x} cy={y} r={R} fill="#000" />
+          ))}
+        </mask>
+      </defs>
+      <rect width={W} height={H} fill="var(--color-crema)" mask={`url(#${id})`} />
+      <rect x="6.5" y="6.5" width={W - 13} height={H - 13} fill="none" stroke="currentColor" strokeWidth="0.9" />
+      <svg x="15" y="20" width="30" height="31" viewBox="-34 -52 68 70" fill="currentColor">
+        <path d={HOJA} />
+      </svg>
+    </svg>
+  );
+}

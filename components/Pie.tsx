@@ -4,7 +4,7 @@ import { marca, pie, sede } from "@/content/sitio";
 
 /*
  * El pie en dos partes, como la referencia: un bloque verde con la frase y los enlaces, y un cierre sobre una
- * foto de los cerros salteños con el logo completo grande (la ilustración circular del brief), "Estd" y "2026"
+ * foto de los cerros salteños con el logo completo grande (la ilustración circular del brief), "Desde" y "2026"
  * a los lados, una línea punteada y la fila legal.
  */
 export default function Pie() {
@@ -73,7 +73,7 @@ export default function Pie() {
         <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/55 via-black/50 to-black/70" />
 
         <div className="relative z-10 flex flex-1 items-center justify-center gap-6 px-6 pt-12 md:gap-10">
-          <span className="etiqueta pill bg-black/40 text-crema">Estd</span>
+          <span className="etiqueta pill bg-black/40 text-crema">Desde</span>
           <img
             src="/assets/logo/poncho-verde-320.webp"
             width={320}
@@ -88,24 +88,16 @@ export default function Pie() {
         <div className="relative z-10 px-6 pb-8 md:px-10">
           <div className="mx-auto max-w-[1240px]">
           <div className="border-t border-dashed border-crema/45" />
-          <div className="flex flex-col gap-3 pt-5 text-[12px] text-crema/85 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 pt-5 text-[13px] text-crema/90 sm:flex-row sm:items-center sm:justify-between">
             <p>
               © {anio} {marca.nombreCompleto}
             </p>
-            <ul className="flex flex-wrap gap-x-6">
-              <li>
-                <a href="/privacidad" className="enlace inline-flex min-h-11 items-center">
-                  Privacidad
-                </a>
-              </li>
-              {creditos.length > 0 && (
-                <li>
-                  <a href="/creditos" className="enlace inline-flex min-h-11 items-center">
-                    Fotos vía Wikimedia Commons
-                  </a>
-                </li>
-              )}
-            </ul>
+            {/* la política de privacidad ya está en la columna "Asociarse": acá solo los créditos de las fotos */}
+            {creditos.length > 0 && (
+              <a href="/creditos" className="enlace inline-flex min-h-11 items-center self-start sm:self-auto">
+                Fotos vía Wikimedia Commons
+              </a>
+            )}
           </div>
           </div>
         </div>
