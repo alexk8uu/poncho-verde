@@ -1,0 +1,23 @@
+# dependencias y compilación
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.vercel
+
+# variables de entorno (claves del proveedor de email, Supabase, webhook)
+.env
+.env*.local
+
+# configuración local de cada máquina
+*.local.json
+.npm-install.log
+
+# skills instaladas: se reinstalan desde skills-lock.json
+.agents/
+.claude/skills/
+
+# trabajo local de la skill de diseño: capturas, chequeos, logs y perfil de Chrome
+.taste-skill/
+shots/
