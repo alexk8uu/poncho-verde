@@ -19,6 +19,9 @@ export default function Revelar() {
           if (e.isIntersecting || e.boundingClientRect.top < 0) {
             e.target.setAttribute("data-visible", "");
             io.unobserve(e.target);
+            // terminada la entrada, sin retrasos: lo que tenga hover (las postales) responde al instante
+            const el = e.target;
+            window.setTimeout(() => el.setAttribute("data-quieto", ""), 1200);
           }
         }
         raiz.classList.add("js-revelar");

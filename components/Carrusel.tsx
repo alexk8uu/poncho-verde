@@ -132,7 +132,7 @@ export default function Carrusel({
             type="button"
             onClick={() => ir(actual - 1)}
             aria-label="Foto anterior"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-crema/50 hover:border-crema"
+            className="flecha-carrusel flex h-11 w-11 items-center justify-center rounded-full border border-crema/50 hover:border-crema"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
               <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -148,7 +148,7 @@ export default function Carrusel({
             type="button"
             onClick={() => ir(actual + 1)}
             aria-label="Foto siguiente"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-crema/50 hover:border-crema"
+            className="flecha-carrusel flex h-11 w-11 items-center justify-center rounded-full border border-crema/50 hover:border-crema"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
               <path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

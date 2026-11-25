@@ -42,7 +42,7 @@ function Alerta({ className = "" }: { className?: string }) {
 
 function MensajeError({ id, texto }: { id: string; texto?: string }) {
   return (
-    <p id={id} className={`mt-2 flex items-start gap-2 text-[15px] leading-snug text-crema ${texto ? "" : "hidden"}`}>
+    <p id={id} className={`aviso mt-2 flex items-start gap-2 text-[15px] leading-snug text-crema ${texto ? "" : "hidden"}`}>
       <Alerta className="mt-[3px] h-4 w-4" />
       {texto}
     </p>
@@ -67,9 +67,9 @@ export default function FormularioAsociacion() {
 
   if (estado.estado === "enviado") {
     return (
-      <div ref={listo} tabIndex={-1} role="status" className="rounded-[2px] border border-crema/40 p-6 outline-none">
+      <div ref={listo} tabIndex={-1} role="status" className="gracias rounded-[2px] border border-crema/40 p-6 outline-none">
         <p className="script text-[30px]">¡Gracias!</p>
-        <p className="mt-2 text-[17px] leading-relaxed">{asociate.enviado}</p>
+        <p className="gracias__texto mt-2 text-[17px] leading-relaxed">{asociate.enviado}</p>
       </div>
     );
   }
@@ -162,7 +162,7 @@ export default function FormularioAsociacion() {
       {/* campo trampa contra envíos automáticos: oculto para las personas */}
       <input type="text" name="empresa" tabIndex={-1} autoComplete="off" hidden aria-hidden="true" />
       {estado.estado === "error" && !enviando && (
-        <div role="alert" className="flex gap-3 border border-crema/45 bg-black/15 p-4 text-[15px] leading-snug">
+        <div role="alert" className="aviso flex gap-3 border border-crema/45 bg-black/15 p-4 text-[15px] leading-snug">
           <Alerta className="mt-[2px] h-[18px] w-[18px]" />
           <div>
             <p className="font-medium">{asociate.fallo.titulo}</p>

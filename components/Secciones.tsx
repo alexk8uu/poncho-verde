@@ -65,15 +65,15 @@ export function Hero() {
 
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
         <h1 id="hero-h" className="flex flex-col items-center [text-shadow:0_1px_28px_rgb(0_0_0/0.3)]">
-          <span className="ancho entrada text-[clamp(2.1rem,1.12rem+3.92vw,4.55rem)] leading-none [animation-delay:200ms]">
+          <span className="ancho entrada text-[clamp(2.1rem,1.12rem+3.92vw,4.55rem)] leading-none [--retraso:100ms] [--dura:700ms] [--sube:14px]">
             {hero.titulo}
           </span>{" "}
           {/* el espacio separa las dos líneas para buscadores y lectores de pantalla */}
-          <span className="script entrada mt-2 text-[clamp(1.35rem,0.91rem+1.68vw,2.4rem)] text-crema/95 md:mt-3 [animation-delay:550ms]">
+          <span className="script entrada mt-2 text-[clamp(1.35rem,0.91rem+1.68vw,2.4rem)] text-crema/95 md:mt-3 [--retraso:220ms] [--dura:600ms] [--sube:10px]">
             {hero.bajada}
           </span>
         </h1>
-        <a href={accionPrincipal.destino} className="boton boton--crema entrada mt-10 [animation-delay:800ms]">
+        <a href={accionPrincipal.destino} className="boton boton--crema entrada mt-10 [--retraso:320ms] [--dura:600ms] [--sube:8px]">
           {accionPrincipal.texto}
           <Flecha />
         </a>
@@ -140,6 +140,9 @@ export function Cinta({ giro, sentido = "izquierda" }: { giro: "abajo" | "arriba
 
 /* 4 · Servicios: título centrado y cuatro postales rotadas y superpuestas, cada una con su foto */
 const ROT = ["-3deg", "2.5deg", "-1.5deg", "3deg"];
+/* la ola de las postales: la primera lidera (más recorrido), las demás la siguen con saltos que se achican */
+const RETRASO = ["0ms", "70ms", "120ms", "150ms"];
+const SUBE = ["32px", "24px", "20px", "18px"];
 const FOTO_SERVICIO: Record<string, Foto> = {
   reprocann: fotos.reprocann,
   acompanamiento: fotos.acompanamiento,
@@ -166,7 +169,7 @@ export function Servicios() {
             className={`postal flex w-full max-w-[300px] flex-col sm:max-w-[330px] ${i % 2 ? "justify-self-end" : "justify-self-start"} sm:justify-self-center p-4 pb-5 text-crema lg:w-[236px] lg:max-w-none xl:w-[292px] ${
               i % 2 ? "bg-bordo lg:mt-8" : "bg-bosque"
             } ${i > 0 ? "lg:-ml-4" : ""} ${i < servicios.lista.length - 1 ? "lg:pr-8" : ""}`}
-            style={{ "--rot": ROT[i], transitionDelay: `${i * 90}ms` } as CSSProperties}
+            style={{ "--rot": ROT[i], "--retraso": RETRASO[i], "--sube": SUBE[i] } as CSSProperties}
           >
             <h3 className="ancho text-[19px] leading-tight">{s.nombre}</h3>
             <p className="mt-2 min-h-[4.1em] text-[14px] leading-snug text-crema/90">{s.descripcion}</p>

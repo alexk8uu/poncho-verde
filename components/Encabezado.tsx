@@ -58,7 +58,7 @@ export default function Encabezado() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-colors ease-suave ${abierto ? "duration-[220ms]" : "duration-150"} ${
         claro ? "text-crema" : "border-b border-bosque/10 bg-crema text-bosque"
       } ${abierto ? "bg-bosque" : ""}`}
     >
@@ -87,7 +87,7 @@ export default function Encabezado() {
           href={accionPrincipal.destino}
           tabIndex={accionMovil ? undefined : -1}
           aria-hidden={accionMovil ? undefined : true}
-          className={`boton boton--bosque min-h-11 px-4 text-[11px] tracking-[0.14em] transition-[opacity,transform,background-color] duration-300 motion-reduce:transition-none ${
+          className={`boton boton--bosque min-h-11 px-4 text-[11px] tracking-[0.14em] transition-[opacity,transform,background-color] ease-suave motion-reduce:transition-none ${abierto ? "duration-[220ms]" : "duration-150"} ${
             accionMovil ? "opacity-100" : "pointer-events-none translate-y-1 opacity-0"
           }`}
         >
@@ -103,20 +103,23 @@ export default function Encabezado() {
           onClick={() => setAbierto((v) => !v)}
         >
           <span
-            className={`block h-px w-7 bg-current transition-transform duration-300 ${abierto ? "translate-y-[4px] rotate-45" : ""}`}
+            className={`block h-px w-7 bg-current transition-transform ease-suave motion-reduce:transition-none ${abierto ? "translate-y-[4px] rotate-45 duration-[220ms]" : "duration-150"}`}
           />
           <span
-            className={`block h-px w-7 bg-current transition-transform duration-300 ${abierto ? "-translate-y-[4px] -rotate-45" : ""}`}
+            className={`block h-px w-7 bg-current transition-transform ease-suave motion-reduce:transition-none ${abierto ? "-translate-y-[4px] -rotate-45 duration-[220ms]" : "duration-150"}`}
           />
         </button>
         </div>
       </div>
 
+      {/* cerrado: invisible e inerte (fuera del foco y de los lectores de pantalla); la clase anima la entrada y la salida */}
       <div
         id="menu-movil"
-        hidden={!abierto}
-        className="fixed inset-x-0 bottom-0 top-[72px] overflow-y-auto bg-bosque px-6 pb-10 pt-8 text-crema lg:hidden"
+        data-abierto={abierto || undefined}
+        inert={!abierto}
+        className="menu-movil fixed inset-x-0 bottom-0 top-[72px] overflow-y-auto bg-bosque text-crema lg:hidden"
       >
+        <div className="menu-movil__contenido px-6 pb-10 pt-8">
         <nav aria-label="Menú" className="flex flex-col">
           {nav.map((item) => (
             <a
@@ -133,6 +136,7 @@ export default function Encabezado() {
           {accionPrincipal.texto}
         </a>
         <Emblema className="mx-auto mt-14 h-10 w-10 opacity-60" />
+        </div>
       </div>
     </header>
   );

@@ -171,7 +171,14 @@
     z-index: 5;
     box-shadow: 0 26px 50px -24px rgb(20 30 22 / 0.6);
   }
-  .js-revelar .postal[data-revelar]:not([data-visible]) { transform: rotate(0deg) translateY(28px); }
+  .js-revelar .postal[data-revelar]:not([data-visible]) { transform: rotate(0deg) translateY(var(--sube, 28px)); }
+  /*
+   * con las cuatro postales en fila entran como una ola: saltos que se achican (0, 70, 120, 150ms, en --retraso).
+   * El retraso vale solo mientras entran: Revelar marca data-quieto al terminar, así el hover responde sin espera.
+   */
+  @media (min-width: 1024px) {
+    .js-revelar .postal[data-revelar][data-visible]:not([data-quieto]) { transition-delay: var(--retraso, 0ms); }
+  }
 
   /* entradas de sección sutiles (solo con JS; sin JS todo se ve) */
   .js-revelar [data-revelar] {
@@ -185,11 +192,44 @@
   /* estampilla (components/Emblema.tsx): el papel con el borde troquelado lleva una sombra corta que sigue el troquel */
   .estampilla { filter: drop-shadow(0 6px 8px rgb(20 30 22 / 0.35)); }
 
-  /* preguntas: el signo gira al abrir */
+  /*
+   * preguntas: la respuesta se despliega (altura) y aparece (opacidad) mientras el signo gira, los tres en 200ms.
+   * Donde no hay ::details-content o interpolate-size, abre al instante como siempre y conserva el fundido.
+   */
   .pregunta > summary { list-style: none; cursor: pointer; }
   .pregunta > summary::-webkit-details-marker { display: none; }
-  .pregunta .signo { transition: transform 300ms var(--ease-suave); }
+  .pregunta .signo { transition: transform 200ms var(--ease-suave); }
   .pregunta[open] .signo { transform: rotate(45deg); }
+  .pregunta { interpolate-size: allow-keywords; }
+  .pregunta::details-content {
+    height: 0;
+    overflow: clip;
+    transition: height 200ms var(--ease-suave), content-visibility 200ms allow-discrete;
+  }
+  .pregunta[open]::details-content { height: auto; }
+  .pregunta > p { transition: opacity 200ms var(--ease-suave); }
+  .pregunta:not([open]) > p { opacity: 0; }
+
+  /* avisos de error del formulario: entran apenas, sin hacer esperar */
+  .aviso { transition: opacity 180ms var(--ease-suave), transform 180ms var(--ease-suave); }
+
+  /* "¡Gracias!": el final del recorrido, una vez por persona; el texto llega 80ms después del saludo */
+  .gracias, .gracias__texto { transition: opacity 500ms var(--ease-suave), transform 500ms var(--ease-suave); }
+  .gracias__texto { transition-delay: 80ms; }
+
+  /* menú del celular: baja del header al abrir (220ms) y se va más rápido (150ms) */
+  .menu-movil {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 150ms var(--ease-suave), visibility 0s linear 150ms;
+  }
+  .menu-movil__contenido { transform: translateY(-8px); transition: transform 150ms var(--ease-suave); }
+  .menu-movil[data-abierto] { visibility: visible; opacity: 1; transition: opacity 220ms var(--ease-suave), visibility 0s; }
+  .menu-movil[data-abierto] .menu-movil__contenido { transform: none; transition-duration: 220ms; }
+
+  /* flechas del carrusel: la misma presión que los botones */
+  .flecha-carrusel { transition: transform 160ms var(--ease-suave), border-color 200ms ease; }
+  .flecha-carrusel:active { transform: scale(0.95); }
 
   /* formulario sobre bordó */
   .campo input[type="text"], .campo input[type="email"], .campo input[type="tel"] {
@@ -231,25 +271,54 @@
 .cinta__pista--derecha { animation-direction: reverse; }
 .cinta:hover .cinta__pista { animation-play-state: paused; }
 
-/* entrada del hero, una vez al cargar */
+/*
+ * Entrada del hero, una vez al cargar: el título lidera, la bajada y el botón lo siguen con saltos que se achican
+ * (100 → 220 → 320ms) y recorridos más cortos; la foto es el escenario y se aclara por debajo. Todo completo en ~0,9s.
+ * Cada pieza fija --retraso, --dura y --sube. `backwards` (no `both`): al terminar, el elemento vuelve a sus estilos
+ * propios, así el botón conserva la presión al tocarlo.
+ */
 @keyframes entrar {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translateY(var(--sube, 14px)); }
 }
 @keyframes aclarar {
-  from { transform: scale(1.06); filter: brightness(0.7); }
-  to { transform: scale(1); filter: none; }
+  from { transform: scale(1.03); filter: brightness(0.7); }
 }
-.entrada { animation: entrar 1100ms var(--ease-suave) both; }
-.entrada-foto { animation: aclarar 2200ms var(--ease-suave) both; }
+@keyframes aparecer {
+  from { opacity: 0; }
+}
+.entrada { animation: entrar var(--dura, 700ms) var(--ease-suave) var(--retraso, 0ms) backwards; }
+.entrada-foto { animation: aclarar 1400ms var(--ease-suave) backwards; }
+/* la foto del hero queda sin el filtro de película, como hasta ahora */
+.pelicula > img.entrada-foto { filter: none; }
+
+/* punto de partida de lo que entra al aparecer en la página */
+@starting-style {
+  .aviso { opacity: 0; transform: translateY(-4px); }
+  .gracias, .gracias__texto { opacity: 0; transform: translateY(12px); }
+  /* la respuesta no tiene estilo mientras la pregunta está cerrada: el fundido arranca desde acá */
+  .pregunta[open] > p { opacity: 0; }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .entrada, .entrada-foto, .cinta__pista { animation: none; }
+  /* menos movimiento, no cero: quedan los fundidos que ayudan a entender, sin desplazamientos */
+  .aviso { transition: opacity 180ms var(--ease-suave); }
+  .gracias, .gracias__texto { transition: opacity 200ms var(--ease-suave); }
+  .pregunta::details-content { transition: none; }
+  .pregunta > p { transition-duration: 150ms; }
+  .menu-movil { transition: opacity 150ms var(--ease-suave), visibility 0s linear 150ms; }
+  .menu-movil[data-abierto] { transition: opacity 150ms var(--ease-suave), visibility 0s; }
+  .menu-movil__contenido, .menu-movil[data-abierto] .menu-movil__contenido { transform: none; transition: none; }
+  .flecha-carrusel:active { transform: none; }
+  /* el hero aparece todo junto, solo con opacidad */
+  .entrada { animation: aparecer 400ms var(--ease-suave) 0ms backwards; }
+  .entrada-foto, .cinta__pista { animation: none; }
   .postal, .postal:hover, .js-revelar .postal[data-revelar]:not([data-visible]) { transition: none; }
   .js-revelar .postal[data-revelar]:not([data-visible]) { transform: rotate(var(--rot)); }
   .js-revelar [data-revelar], .js-revelar [data-revelar]:not([data-visible]) { opacity: 1; transform: none; transition: none; }
   .js-revelar .postal[data-revelar] { transform: rotate(var(--rot)); }
-  .zoom > img, .boton, .boton .flecha, .pregunta .signo { transition: none; }
+  .zoom > img, .boton .flecha, .pregunta .signo { transition: none; }
+  .boton { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
+  .boton:active { transform: none; }
 }
 
 /* páginas de texto */
