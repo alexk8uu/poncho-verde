@@ -14,7 +14,7 @@ import { COGOLLO_VIEWBOX, CogolloMascara } from "./Cogollo";
  * Cada pieza lleva un halo de papel para despegarse de lo que tiene detrás.
  *
  * Los movimientos están en lib/armado.ts. Sin JS se ve el cuadro quieto: el cogollo solo. En la web va como
- * CogolloArmado: el cogollo se mece cada tanto para invitar a tocarlo y, al presionarlo, corre el armado una vez.
+ * CogolloArmado: el cogollo amaga cada tanto con salir volando (globals.css) y, al presionarlo, corre el armado una vez.
  */
 
 const TINTA = "currentColor";
@@ -178,7 +178,16 @@ const SOMBRA_PORRO = Array.from({ length: 19 }, (_, i) => {
 
 /* ---------- la escena ---------- */
 
-export function Armado({ ref, className = "" }: { ref?: Ref<SVGSVGElement>; className?: string }) {
+export function Armado({
+  ref,
+  className = "",
+  suelo = false,
+}: {
+  ref?: Ref<SVGSVGElement>;
+  className?: string;
+  /** Las rayas de suelo bajo el cogollo quieto, para el amago del CogolloArmado. */
+  suelo?: boolean;
+}) {
   const id = `armado${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
   return (
     <svg ref={ref} className={className} viewBox="0 0 400 400" aria-hidden="true" focusable="false">
@@ -287,6 +296,16 @@ export function Armado({ ref, className = "" }: { ref?: Ref<SVGSVGElement>; clas
         </g>
       </Pieza>
 
+      {/* el suelo del cogollo quieto: se achica cuando amaga un salto */}
+      {suelo && (
+        <path
+          className="armado__suelo"
+          d="M185,359.5H215M193,365H207"
+          stroke={TINTA}
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+      )}
       <Pieza nombre="cogollo">
         <g className="armado__vaiven">
           <Cogollo id={`${id}-cogollo`} />
@@ -323,8 +342,8 @@ export function Armado({ ref, className = "" }: { ref?: Ref<SVGSVGElement>; clas
 }
 
 /**
- * El cogollo que se presiona: quieto se mece cada tanto (globals.css, .armado__vaiven) y al tocarlo corre el armado
- * una vez y vuelve a quedar como estaba. Mientras corre no se puede volver a lanzar.
+ * El cogollo que se presiona: quieto amaga cada tanto con un saltito (globals.css, .armado__vaiven y .armado__suelo) y
+ * al tocarlo corre el armado una vez y vuelve a quedar como estaba. Mientras corre no se puede volver a lanzar.
  */
 export function CogolloArmado({ className = "" }: { className?: string }) {
   const ref = useRef<SVGSVGElement>(null);
@@ -351,20 +370,14 @@ export function CogolloArmado({ className = "" }: { className?: string }) {
 
   return (
     <div className={`armado relative ${className}`} data-estado={andando ? "andando" : "quieto"}>
-      <Armado ref={ref} className="armado__escena pointer-events-none absolute inset-0 h-full w-full" />
+      <Armado ref={ref} suelo className="armado__escena pointer-events-none absolute inset-0 h-full w-full" />
       <button
         type="button"
         onClick={armar}
         aria-disabled={andando || undefined}
-        className="armado__boton absolute left-[15%] top-[56%] flex h-[44%] w-[70%] cursor-pointer flex-col items-center justify-end rounded-2xl pb-[1%] aria-disabled:cursor-default"
-      >
-        {/* la invitación dicha: en el celular no hay puntero que haga crecer al cogollo */}
-        <span className="armado__pista etiqueta whitespace-nowrap text-[11px] text-tinta-suave">
-          <span className="pointer-fine:hidden">Tocá el cogollo</span>
-          <span className="hidden pointer-fine:inline">Hacé clic en el cogollo</span>
-          <span className="sr-only"> y mirá cómo se vuelve un armado</span>
-        </span>
-      </button>
+        aria-label="Tocá el cogollo y mirá cómo se vuelve un armado"
+        className="armado__boton absolute left-[22%] top-[52%] h-[44%] w-[56%] cursor-pointer rounded-[40%] aria-disabled:cursor-default"
+      />
     </div>
   );
 }

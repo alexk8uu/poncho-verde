@@ -343,34 +343,44 @@
 .pelicula > img.entrada-foto { filter: none; }
 
 /*
- * El cogollo del manifiesto (CogolloArmado en components/Armado.tsx). Quieto, se mece cada tanto desde el tallo para
- * invitar a tocarlo: un vaivén corto que se apaga y una pausa larga. Con el puntero encima o con foco crece apenas y
- * al presionarlo se achica; entonces corre el armado (WAAPI) y el vaivén se detiene hasta que vuelve el cogollo.
- * Abajo el cuadro se esfuma, así los brazos entran sin un corte recto.
+ * El cogollo del manifiesto (CogolloArmado en components/Armado.tsx). No dice "tocame": hace un amago de lo que pasa
+ * si lo tocás. Cada tanto se agacha, da un saltito, flota un instante, cae con un rebote y se tambalea hasta quedarse
+ * quieto, como si quisiera irse volando y no pudiera. Debajo, dos rayas de suelo se achican cuando salta y se estiran
+ * cuando aterriza. El primer amago llega poco después de que la sección entra en pantalla; después, cada 5,5 s.
+ * Con el puntero encima o con foco crece apenas y al presionarlo se achica; entonces corre el armado (WAAPI) y el
+ * amago se detiene hasta que vuelve el cogollo. Abajo el cuadro se esfuma, así los brazos entran sin un corte recto.
  */
-@keyframes vaiven {
-  0%, 40%, 100% { transform: rotate(0deg); }
-  6% { transform: rotate(-8deg); }
-  14% { transform: rotate(6.5deg); }
-  22% { transform: rotate(-4deg); }
-  30% { transform: rotate(2deg); }
-  36% { transform: rotate(-0.5deg); }
+@keyframes brinco {
+  0%, 39%, 100% { transform: none; }
+  4% { transform: scale(1.07, 0.88); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); } /* se agacha */
+  11% { transform: translateY(-22px) scale(0.95, 1.07) rotate(-3deg); } /* salta */
+  16% { transform: translateY(-25px) rotate(2deg); animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45); } /* flota */
+  21% { transform: translateY(-1px) scale(0.97, 1.05); } /* cae */
+  23.5% { transform: scale(1.08, 0.9); } /* aterriza */
+  27% { transform: rotate(-5deg); }
+  31% { transform: rotate(3.5deg); }
+  35% { transform: rotate(-1.5deg); }
 }
-.armado__escena { mask-image: linear-gradient(to bottom, #000 90%, transparent); }
+@keyframes suelo {
+  0%, 4%, 27%, 100% { transform: none; opacity: 1; }
+  11%, 16% { transform: scaleX(0.5); opacity: 0.45; animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45); }
+  23.5% { transform: scaleX(1.15); }
+}
+.armado__escena { mask-image: linear-gradient(to bottom, #000 93%, transparent); }
 .armado__vaiven {
   transform-box: fill-box;
   transform-origin: 50% 100%;
   transition: scale 220ms var(--ease-suave);
 }
-.armado[data-estado="quieto"] .armado__vaiven { animation: vaiven 3.8s cubic-bezier(0.65, 0, 0.35, 1) 2.5s infinite; }
+.armado__suelo { transform-box: fill-box; transform-origin: 50% 50%; transition: opacity 300ms var(--ease-suave); }
+[data-visible] .armado[data-estado="quieto"] .armado__vaiven { animation: brinco 5.5s cubic-bezier(0.65, 0, 0.35, 1) 1.6s infinite; }
+[data-visible] .armado[data-estado="quieto"] .armado__suelo { animation: suelo 5.5s cubic-bezier(0.65, 0, 0.35, 1) 1.6s infinite; }
+.armado[data-estado="andando"] .armado__suelo { opacity: 0; }
 .armado[data-estado="quieto"]:has(.armado__boton:focus-visible) .armado__vaiven { scale: 1.05; }
 @media (hover: hover) and (pointer: fine) {
   .armado[data-estado="quieto"]:has(.armado__boton:hover) .armado__vaiven { scale: 1.05; }
 }
 .armado[data-estado="quieto"]:has(.armado__boton:active) .armado__vaiven { scale: 0.96; transition-duration: 100ms; }
-/* la etiqueta "Tocá el cogollo" se corre mientras pasa el armado, que usa ese lugar */
-.armado__pista { transition: opacity 200ms var(--ease-suave); }
-.armado[data-estado="andando"] .armado__pista { opacity: 0; }
 
 /* punto de partida de lo que entra al aparecer en la página */
 @starting-style {
@@ -404,8 +414,9 @@
   .zoom > img, .boton .flecha, .pregunta .signo { transition: none; }
   .boton { transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
   .boton:active { transform: none; }
-  /* el cogollo no se mece; presionarlo sigue corriendo el armado, porque es algo que se pide */
-  .armado[data-estado="quieto"] .armado__vaiven { animation: none; }
+  /* el cogollo no amaga; presionarlo sigue corriendo el armado, porque es algo que se pide */
+  [data-visible] .armado[data-estado="quieto"] .armado__vaiven,
+  [data-visible] .armado[data-estado="quieto"] .armado__suelo { animation: none; }
   .armado__vaiven { transition: none; }
 }
 
