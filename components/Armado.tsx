@@ -356,9 +356,15 @@ export function CogolloArmado({ className = "" }: { className?: string }) {
         type="button"
         onClick={armar}
         aria-disabled={andando || undefined}
-        aria-label="Ver cómo el cogollo se vuelve un armado"
-        className="armado__boton absolute left-[32%] top-[56%] h-[36%] w-[36%] cursor-pointer rounded-full aria-disabled:cursor-default"
-      />
+        className="armado__boton absolute left-[15%] top-[56%] flex h-[44%] w-[70%] cursor-pointer flex-col items-center justify-end rounded-2xl pb-[1%] aria-disabled:cursor-default"
+      >
+        {/* la invitación dicha: en el celular no hay puntero que haga crecer al cogollo */}
+        <span className="armado__pista etiqueta whitespace-nowrap text-[11px] text-tinta-suave">
+          <span className="pointer-fine:hidden">Tocá el cogollo</span>
+          <span className="hidden pointer-fine:inline">Hacé clic en el cogollo</span>
+          <span className="sr-only"> y mirá cómo se vuelve un armado</span>
+        </span>
+      </button>
     </div>
   );
 }

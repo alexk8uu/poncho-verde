@@ -368,6 +368,9 @@
   .armado[data-estado="quieto"]:has(.armado__boton:hover) .armado__vaiven { scale: 1.05; }
 }
 .armado[data-estado="quieto"]:has(.armado__boton:active) .armado__vaiven { scale: 0.96; transition-duration: 100ms; }
+/* la etiqueta "Tocá el cogollo" se corre mientras pasa el armado, que usa ese lugar */
+.armado__pista { transition: opacity 200ms var(--ease-suave); }
+.armado[data-estado="andando"] .armado__pista { opacity: 0; }
 
 /* punto de partida de lo que entra al aparecer en la página */
 @starting-style {
