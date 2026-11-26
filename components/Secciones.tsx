@@ -11,6 +11,7 @@ import {
   sede,
   servicios,
 } from "@/content/sitio";
+import { CogolloArmado } from "./Armado";
 import { Emblema, Estampilla, Sello } from "./Emblema";
 import FormularioAsociacion from "./FormularioAsociacion";
 import { Franja, Sol } from "./Marca";
@@ -91,7 +92,8 @@ export function Manifiesto() {
   return (
     <section aria-label="Nuestra misión" className="px-6 py-28 md:px-10 md:py-40">
       <div data-revelar className="mx-auto flex max-w-[860px] flex-col items-center text-center">
-        <Emblema className="h-10 w-10 text-bosque" />
+        {/* el cogollo apoyado abajo en su cuadro: el lugar libre para la animación queda arriba, sobre el margen */}
+        <CogolloArmado className="-mb-[10px] -mt-[110px] size-[224px] text-bosque md:-mt-[148px] md:size-[256px]" />
         <p className="ancho mt-8 text-[clamp(1.35rem,1rem+1.3vw,2.1rem)] leading-[1.35]">{manifiesto.texto}</p>
         {/* los datos confirmados, legibles: la primera prueba de confianza después del hero */}
         <ul className="mt-12 flex flex-col items-center gap-x-5 gap-y-2 text-[16px] font-medium text-bosque sm:flex-row sm:flex-wrap sm:justify-center">
