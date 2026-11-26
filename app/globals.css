@@ -349,11 +349,12 @@
  * Abajo el cuadro se esfuma, así los brazos entran sin un corte recto.
  */
 @keyframes vaiven {
-  0%, 34%, 100% { transform: rotate(0deg); }
-  7% { transform: rotate(-5deg); }
-  15% { transform: rotate(4deg); }
-  22% { transform: rotate(-2.5deg); }
-  28% { transform: rotate(1deg); }
+  0%, 40%, 100% { transform: rotate(0deg); }
+  6% { transform: rotate(-8deg); }
+  14% { transform: rotate(6.5deg); }
+  22% { transform: rotate(-4deg); }
+  30% { transform: rotate(2deg); }
+  36% { transform: rotate(-0.5deg); }
 }
 .armado__escena { mask-image: linear-gradient(to bottom, #000 90%, transparent); }
 .armado__vaiven {
@@ -361,7 +362,7 @@
   transform-origin: 50% 100%;
   transition: scale 220ms var(--ease-suave);
 }
-.armado[data-estado="quieto"] .armado__vaiven { animation: vaiven 4.6s cubic-bezier(0.65, 0, 0.35, 1) 2.5s infinite; }
+.armado[data-estado="quieto"] .armado__vaiven { animation: vaiven 3.8s cubic-bezier(0.65, 0, 0.35, 1) 2.5s infinite; }
 .armado[data-estado="quieto"]:has(.armado__boton:focus-visible) .armado__vaiven { scale: 1.05; }
 @media (hover: hover) and (pointer: fine) {
   .armado[data-estado="quieto"]:has(.armado__boton:hover) .armado__vaiven { scale: 1.05; }
