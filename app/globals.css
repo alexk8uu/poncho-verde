@@ -11,12 +11,16 @@
   --color-bosque: #1f3d2b;
   --color-bosque-2: #2a4a37;
   --color-bordo: #8e2a35;
+  /* el celeste de la franja del logo (bordó · sol · celeste): solo vive en la franja, junto al bordó */
+  --color-celeste: #4a9fe0;
   --color-naranja: #e2622a;
   --color-dorado: #f0b23c;
   --color-tinta-suave: #3a4d3f;
 
   --font-sans: var(--font-archivo), "Archivo", system-ui, sans-serif;
   --font-script: var(--font-pinyon), "Pinyon Script", cursive;
+  /* la romana del logo: el nombre y los títulos de sección */
+  --font-romana: var(--font-cinzel), "Cinzel", Georgia, serif;
 
   --ease-suave: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -70,8 +74,41 @@
     line-height: 1.12;
     text-wrap: balance;
   }
+  /*
+   * la romana del logo (Cinzel): sus minúsculas son versalitas, así "Poncho Verde" se escribe como en el logo,
+   * con la P y la V más altas. Va en el nombre y en los títulos de sección; el texto sigue en la grotesca.
+   */
+  .romana {
+    font-family: var(--font-romana);
+    font-weight: 600;
+    letter-spacing: 0.015em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
   /* un solo tamaño para todos los h2 */
-  .titulo-2 { font-size: clamp(1.8rem, 1.3rem + 1.8vw, 2.8rem); }
+  .titulo-2 { font-size: clamp(1.75rem, 1.3rem + 1.7vw, 2.7rem); }
+
+  /*
+   * la franja del logo (components/Marca.tsx): línea · bordó · sol · celeste · línea. --s es el diámetro del sol;
+   * el resto sale en proporción, con las medidas del logo.
+   */
+  .franja {
+    --s: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--s) * 0.16);
+  }
+  .franja__linea {
+    width: calc(var(--s) * 0.8);
+    height: max(1px, calc(var(--s) * 0.035));
+    background: currentColor;
+    opacity: 0.85;
+  }
+  .franja__barra { width: calc(var(--s) * 0.95); height: max(3px, calc(var(--s) * 0.11)); }
+  .franja__sol { width: var(--s); height: var(--s); flex: none; }
+  .franja__izq { transform-origin: right center; }
+  .franja__der { transform-origin: left center; }
   .script {
     font-family: var(--font-script);
     font-weight: 400;
@@ -288,6 +325,20 @@
 }
 .entrada { animation: entrar var(--dura, 700ms) var(--ease-suave) var(--retraso, 0ms) backwards; }
 .entrada-foto { animation: aclarar 1400ms var(--ease-suave) backwards; }
+/*
+ * El cierre del nombre, como en el logo: el filete se abre desde el centro (160ms) y la franja nace del sol:
+ * el sol aparece girando apenas (280ms) y las barras y las líneas se extienden hacia afuera (340 → 400ms).
+ */
+@keyframes extender {
+  from { transform: scaleX(0); }
+}
+@keyframes brotar {
+  from { opacity: 0; transform: scale(0.55) rotate(-24deg); }
+}
+.extender { animation: extender 700ms var(--ease-suave) var(--retraso, 0ms) backwards; }
+.franja--entrada .franja__sol { animation: brotar 760ms var(--ease-suave) 280ms backwards; }
+.franja--entrada .franja__barra { animation: extender 620ms var(--ease-suave) 340ms backwards; }
+.franja--entrada .franja__linea { animation: extender 560ms var(--ease-suave) 400ms backwards; }
 /* la foto del hero queda sin el filtro de película, como hasta ahora */
 .pelicula > img.entrada-foto { filter: none; }
 
@@ -310,7 +361,11 @@
   .menu-movil__contenido, .menu-movil[data-abierto] .menu-movil__contenido { transform: none; transition: none; }
   .flecha-carrusel:active { transform: none; }
   /* el hero aparece todo junto, solo con opacidad */
-  .entrada { animation: aparecer 400ms var(--ease-suave) 0ms backwards; }
+  .entrada,
+  .extender,
+  .franja--entrada .franja__sol,
+  .franja--entrada .franja__barra,
+  .franja--entrada .franja__linea { animation: aparecer 400ms var(--ease-suave) 0ms backwards; }
   .entrada-foto, .cinta__pista { animation: none; }
   .postal, .postal:hover, .js-revelar .postal[data-revelar]:not([data-visible]) { transition: none; }
   .js-revelar .postal[data-revelar]:not([data-visible]) { transform: rotate(var(--rot)); }

@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import type { Foto } from "@/content/fotos";
-import { Emblema } from "./Emblema";
+import { Sol } from "./Sol";
 
 type Diapositiva = { foto: Foto; etiqueta: string };
 
@@ -86,7 +86,7 @@ export default function Carrusel({
       <div className="relative z-10 mx-auto flex w-full max-w-[1320px] items-center justify-center gap-5 px-6 pt-24 sm:justify-between sm:gap-4 md:px-10">
         {banda.map((b, i) =>
           b === "emblema" ? (
-            <Emblema key={i} className="h-7 w-7 shrink-0" />
+            <Sol key={i} className="h-9 w-9 shrink-0" />
           ) : (
             <span key={i} className={`etiqueta ${i === 0 || i === banda.length - 1 ? "hidden sm:inline" : ""}`}>
               {b}
@@ -96,7 +96,7 @@ export default function Carrusel({
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
-        <h2 id="carrusel-h" className="ancho titulo-2">
+        <h2 id="carrusel-h" className="romana titulo-2">
           {titulo}
         </h2>
         <p className="script mt-3 text-[clamp(1.6rem,1.2rem+1.4vw,2.4rem)] text-crema/90">{script}</p>

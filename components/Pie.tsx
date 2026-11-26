@@ -72,17 +72,30 @@ export default function Pie() {
         />
         <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/55 via-black/50 to-black/70" />
 
-        <div className="relative z-10 flex flex-1 items-center justify-center gap-6 px-6 pt-12 md:gap-10">
-          <span className="etiqueta pill bg-black/40 text-crema">Desde</span>
-          <img
-            src="/assets/logo/poncho-verde-320.webp"
-            width={320}
-            height={320}
-            alt="Logo de Poncho Verde: un gaucho con poncho verde frente a los cerros salteños al atardecer"
-            loading="lazy"
-            className="h-36 w-36 rounded-full shadow-[0_20px_60px_-20px_rgb(0_0_0/0.7)] md:h-44 md:w-44"
-          />
-          <span className="etiqueta pill bg-black/40 text-crema">{marca.desde}</span>
+        {/*
+         * la franja del logo cruzando el pie de lado a lado, con el logo en el lugar del sol:
+         * línea · "Desde" · barra bordó · logo · barra celeste · año · línea
+         */}
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pt-12 md:px-10">
+          <div className="flex w-full max-w-[1240px] items-center gap-3 md:gap-5">
+            <span aria-hidden="true" className="h-[2px] flex-1 bg-crema/55" />
+            <span className="etiqueta pill hidden bg-black/40 text-crema sm:inline-flex">Desde</span>
+            <span aria-hidden="true" className="hidden h-[2px] w-6 bg-crema/55 sm:block md:w-12" />
+            <span aria-hidden="true" className="h-[6px] w-10 bg-bordo sm:w-16 md:h-[8px] md:w-24" />
+            <img
+              src="/assets/logo/poncho-verde-320.webp"
+              width={320}
+              height={320}
+              alt="Logo de Poncho Verde: un gaucho con poncho verde frente a los cerros salteños al atardecer"
+              loading="lazy"
+              className="h-36 w-36 flex-none rounded-full shadow-[0_20px_60px_-20px_rgb(0_0_0/0.7)] md:h-44 md:w-44"
+            />
+            <span aria-hidden="true" className="h-[6px] w-10 bg-celeste sm:w-16 md:h-[8px] md:w-24" />
+            <span aria-hidden="true" className="hidden h-[2px] w-6 bg-crema/55 sm:block md:w-12" />
+            <span className="etiqueta pill hidden bg-black/40 text-crema sm:inline-flex">{marca.desde}</span>
+            <span aria-hidden="true" className="h-[2px] flex-1 bg-crema/55" />
+          </div>
+          <p className="etiqueta pill mt-6 bg-black/40 text-crema sm:hidden">Desde {marca.desde}</p>
         </div>
 
         <div className="relative z-10 px-6 pb-8 md:px-10">

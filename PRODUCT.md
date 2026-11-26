@@ -67,6 +67,10 @@ Es una fundación salteña con sede propia que combina orientación sobre REPROC
 - **Nombre:** Poncho Verde — Fundación de Cannabis Medicinal.
 - **Voz:** cercana, clara y sin jerga, en español rioplatense con voseo ("Asociate", "Te orientamos"). Tiene que transmitir confianza, calidez y orgullo local. Seria, pero no clínica.
 - **Logo** (`brief/refs/logo.jpeg`): ilustración circular con un gaucho de poncho verde, cerros salteños al atardecer, una flor violeta, un cardón y el sol de mayo. La ilustración completa se usa solo en tamaño grande (hero o cierre del footer). Para sellos, badges, marquee y favicon se usa un emblema simplificado a 1 color: la silueta del sombrero en verde bosque, en SVG. Ese emblema todavía no existe y hay que diseñarlo.
+- **Identidad del logo en la web** (pedido del cliente del 2026-11-26 sobre `brief/refs/ref-logo.jpeg`): el cliente prefiere la versión nueva del logo y quiere que la web se parezca más a él.
+  - **Tipografía:** el nombre y los títulos de sección van en la romana del logo nuevo, versalitas tipo Cinzel. Reemplaza a la grotesca del brief §6 en esos lugares; el texto, las etiquetas y los botones siguen en la grotesca.
+  - **Franja del logo:** línea · barra bordó · sol de mayo · barra celeste · línea. Es un motivo de marca que el cliente pidió usar más.
+  - **Logo nuevo:** falta el archivo limpio. `ref-logo.jpeg` tiene anotaciones encima, así que todavía no sirve como asset.
 - **Paleta tomada del logo** (fijada en `brief/BRIEF.md` §5): verde bosque `#1F3D2B`, crema `#F6F1E4`, bordó `#8E2A35`, naranja atardecer `#E2622A`, violeta `#8A5FA8`. Dorado sol `#F0B23C` y celeste `#4A9FE0` solo en detalles mínimos.
 - **Referencia visual vinculante:** Montreval Country Club (`brief/refs/web-referencia.webp`). Se toma su sistema visual, nunca sus textos, su emblema ni el universo golf. La dirección no se sortea. El detalle está en `brief/BRIEF.md` §6–§7 y el sistema resultante se documentará en DESIGN.md.
 - **Identidad regional:** Salta y el norte argentino (poncho, cerros, cardón, sol), sin caer en folclore de postal.

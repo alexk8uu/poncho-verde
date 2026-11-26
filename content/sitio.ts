@@ -83,7 +83,6 @@ export const servicios = {
 };
 
 export const quienesSomos = {
-  etiqueta: "Quiénes somos",
   titulo: "Creemos que el cannabis medicinal es salud, comunidad e información.",
   validar: true,
   // la sede y los socios ya están debajo del manifiesto: el marco de la foto lleva solo el lema
@@ -134,7 +133,6 @@ export const preguntas = {
 };
 
 export const asociate = {
-  etiqueta: "Asociación",
   titulo: "Asociate a Poncho Verde",
   script: "Te esperamos en Salta",
   bajada: "Completá tus datos y te contactamos por WhatsApp o email en los próximos días. Para mayores de 18 años.",

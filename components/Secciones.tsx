@@ -13,6 +13,7 @@ import {
 } from "@/content/sitio";
 import { Emblema, Estampilla, Sello } from "./Emblema";
 import FormularioAsociacion from "./FormularioAsociacion";
+import { Franja, Sol } from "./Marca";
 
 /** Una foto con los datos que pide el checker (data-source, data-subject). */
 function Imagen({
@@ -63,17 +64,20 @@ export function Hero() {
       <div className="absolute inset-0 z-[2] bg-[radial-gradient(ellipse_at_center,rgb(15_25_18/0.58),rgb(15_25_18/0.3)_75%)]" />
       <div className="absolute inset-x-0 top-0 z-[2] h-44 bg-gradient-to-b from-black/60 to-transparent" />
 
+      {/* el bloque de texto del logo: el nombre, un filete, la bajada en versales espaciadas y la franja del sol */}
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
-        <h1 id="hero-h" className="flex flex-col items-center [text-shadow:0_1px_28px_rgb(0_0_0/0.3)]">
-          <span className="ancho entrada text-[clamp(2.1rem,1.12rem+3.92vw,4.55rem)] leading-none [--retraso:100ms] [--dura:700ms] [--sube:14px]">
+        <h1 id="hero-h" className="flex w-fit max-w-full flex-col items-center [text-shadow:0_2px_30px_rgb(0_0_0/0.4)]">
+          <span className="romana entrada text-[clamp(2.35rem,1.2rem+5vw,5.5rem)] font-extrabold leading-[0.95] tracking-[0.01em] [--retraso:100ms] [--dura:700ms] [--sube:14px]">
             {hero.titulo}
           </span>{" "}
           {/* el espacio separa las dos líneas para buscadores y lectores de pantalla */}
-          <span className="script entrada mt-2 text-[clamp(1.35rem,0.91rem+1.68vw,2.4rem)] text-crema/95 md:mt-3 [--retraso:220ms] [--dura:600ms] [--sube:10px]">
+          <span aria-hidden="true" className="extender mt-3 block h-[2px] w-full bg-crema/80 md:mt-4 [--retraso:160ms]" />
+          <span className="romana entrada mt-3 text-[clamp(0.85rem,0.68rem+0.7vw,1.3rem)] font-semibold uppercase leading-[1.35] tracking-[0.15em] text-crema/95 sm:tracking-[0.2em] md:mt-4 [--retraso:220ms] [--dura:600ms] [--sube:10px]">
             {hero.bajada}
           </span>
         </h1>
-        <a href={accionPrincipal.destino} className="boton boton--crema entrada mt-10 [--retraso:320ms] [--dura:600ms] [--sube:8px]">
+        <Franja entrada cara className="mt-5 text-crema [--s:40px] md:mt-6 md:[--s:54px]" />
+        <a href={accionPrincipal.destino} className="boton boton--crema entrada mt-10 [--retraso:460ms] [--dura:600ms] [--sube:8px]">
           {accionPrincipal.texto}
           <Flecha />
         </a>
@@ -115,10 +119,11 @@ export function Manifiesto() {
 export function Cinta({ giro, sentido = "izquierda" }: { giro: "abajo" | "arriba"; sentido?: "izquierda" | "derecha" }) {
   // cuatro vueltas de lemas por copia: alcanzan para cubrir pantallas de hasta ~2700px sin hueco en el loop
   const tanda = [...lemas, ...lemas, ...lemas, ...lemas];
+  // entre lema y lema, la hoja y el sol del logo, alternados
   const copia = (n: number) =>
     tanda.map((l, i) => (
       <span key={`${n}-${i}`} className="flex items-center gap-6 pr-6">
-        <Emblema className="h-[18px] w-[18px]" />
+        {i % 2 ? <Sol className="h-[22px] w-[22px]" /> : <Emblema className="h-[18px] w-[18px]" />}
         <span className="script text-[20px] leading-none">{l}</span>
       </span>
     ));
@@ -155,7 +160,7 @@ export function Servicios() {
   return (
     <section id="servicios" aria-labelledby="servicios-h" className="overflow-hidden px-6 pb-28 pt-28 md:px-10 md:pb-40 md:pt-36">
       <div data-revelar className="mx-auto max-w-[640px] text-center">
-        <h2 id="servicios-h" className="ancho titulo-2">
+        <h2 id="servicios-h" className="romana titulo-2">
           {servicios.titulo}
         </h2>
         <p className="mx-auto mt-4 max-w-[46ch] text-[15px] text-tinta-suave">{servicios.bajada}</p>
@@ -192,8 +197,7 @@ export function QuienesSomos() {
   return (
     <section id="quienes-somos" aria-labelledby="quienes-h" className="overflow-x-clip px-6 py-28 md:px-10 md:py-36">
       <div data-revelar className="mx-auto max-w-[760px] text-center">
-        <p className="etiqueta text-tinta-suave">{quienesSomos.etiqueta}</p>
-        <h2 id="quienes-h" className="ancho titulo-2 mt-4">
+        <h2 id="quienes-h" className="romana titulo-2">
           {quienesSomos.titulo}
         </h2>
       </div>
@@ -213,6 +217,7 @@ export function QuienesSomos() {
         <Sello
           id="sello-quienes"
           texto="PONCHO VERDE ◆ SALTA ◆ DESDE 2026 ◆ "
+          centro="sol"
           className="absolute -bottom-9 -right-3 h-[92px] w-[92px] rotate-[12deg] text-bosque md:h-[104px] md:w-[104px] lg:-right-9"
         />
       </figure>
@@ -227,8 +232,8 @@ export function Preguntas() {
     <section id="preguntas" aria-labelledby="preguntas-h" className="px-6 py-28 md:px-10 md:py-36">
       <div data-revelar className="mx-auto max-w-[720px]">
         <div className="text-center">
-          <Emblema className="mx-auto h-8 w-8" />
-          <h2 id="preguntas-h" className="ancho titulo-2 mt-6">
+          <Franja tam={30} className="text-bosque" />
+          <h2 id="preguntas-h" className="romana titulo-2 mt-7">
             {preguntas.titulo}
           </h2>
           <p className="mt-3 text-[15px] text-tinta-suave">{preguntas.bajada}</p>
@@ -261,8 +266,7 @@ export function Asociate() {
           <Imagen foto={fotos.asociate} sizes="(max-width: 1023px) 100vw, 1650px" posicion="55% 100%" className="origin-bottom scale-[1.2]" />
         </div>
         <div className="bg-bordo px-6 py-12 text-crema sm:px-10 md:px-14 md:py-16">
-          <p className="etiqueta pill">{asociate.etiqueta}</p>
-          <h2 id="asociate-h" className="ancho titulo-2 mt-6">
+          <h2 id="asociate-h" className="romana titulo-2">
             {asociate.titulo}
           </h2>
           <p className="script mt-2 text-[30px] text-crema/90">{asociate.script}</p>

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { accionPrincipal, nav } from "@/content/sitio";
 import { Emblema } from "./Emblema";
+import { Logotipo } from "./Marca";
 
 /*
  * El encabezado de la referencia: el emblema y el nombre a la izquierda, sobre la foto del hero y en crema;
@@ -64,11 +65,7 @@ export default function Encabezado() {
     >
       <div className="mx-auto flex h-[72px] max-w-[1320px] items-center justify-between px-6 md:px-10">
         <a href="#inicio" className="flex min-h-11 items-center gap-3" onClick={cerrar} aria-label="Poncho Verde, inicio">
-          <Emblema className="h-8 w-8" />
-          <span className="flex flex-col leading-none">
-            <span className="text-[13px] font-medium tracking-[0.18em] uppercase [font-stretch:125%]">Poncho Verde</span>
-            <span className="script -mt-0.5 text-[19px]">Fundación</span>
-          </span>
+          <Logotipo />
         </a>
 
         <nav aria-label="Principal" className="hidden items-center gap-9 lg:flex">

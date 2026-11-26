@@ -1,3 +1,5 @@
+import { SolTrazos } from "./Sol";
+
 /*
  * El emblema de la marca: una hoja de cannabis minimalista, de un color (toma el color del texto).
  * Se usa como sello, en la cinta, en el encabezado y en los separadores. El logo completo (la ilustración
@@ -22,8 +24,21 @@ export function Emblema({ className = "", titulo }: { className?: string; titulo
   );
 }
 
-/** Sello circular: el emblema al centro y un texto alrededor. `id` tiene que ser único en la página. */
-export function Sello({ id, texto, className = "" }: { id: string; texto: string; className?: string }) {
+/**
+ * Sello circular: un texto alrededor, en la romana del logo, y al centro la hoja o el sol del logo.
+ * `id` tiene que ser único en la página.
+ */
+export function Sello({
+  id,
+  texto,
+  centro = "hoja",
+  className = "",
+}: {
+  id: string;
+  texto: string;
+  centro?: "hoja" | "sol";
+  className?: string;
+}) {
   return (
     <svg className={className} viewBox="0 0 100 100" aria-hidden="true" focusable="false">
       <circle cx="50" cy="50" r="48" fill="var(--color-crema)" />
@@ -32,14 +47,20 @@ export function Sello({ id, texto, className = "" }: { id: string; texto: string
       <defs>
         <path id={id} d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0" />
       </defs>
-      <text fill="currentColor" fontSize="7.6" fontWeight="500" letterSpacing="1.4" fontFamily="var(--font-sans)">
+      <text fill="currentColor" fontSize="7.8" fontWeight="700" letterSpacing="1.2" fontFamily="var(--font-romana)">
         <textPath href={`#${id}`} textLength="228" lengthAdjust="spacing">
           {texto}
         </textPath>
       </text>
-      <g transform="translate(50 56) scale(0.42)" fill="currentColor">
-        <path d={HOJA} />
-      </g>
+      {centro === "sol" ? (
+        <svg x="27" y="27" width="46" height="46" viewBox="-50 -50 100 100">
+          <SolTrazos />
+        </svg>
+      ) : (
+        <g transform="translate(50 56) scale(0.42)" fill="currentColor">
+          <path d={HOJA} />
+        </g>
+      )}
     </svg>
   );
 }
